@@ -6,7 +6,7 @@
 /*   By: fgaribot <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 18:17:52 by fgaribot          #+#    #+#             */
-/*   Updated: 2018/11/15 11:04:57 by fgaribot         ###   ########.fr       */
+/*   Updated: 2018/12/06 09:06:23 by fgaribot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,6 @@ void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 void				ft_sort_int_tab(int *tab, int size);
 float				ft_recursive_power(int nb, int power);
+int					get_next_line(int fd, char **line);
 
 #endif

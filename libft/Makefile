@@ -6,7 +6,7 @@
 #    By: fgaribot <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/06 17:15:16 by fgaribot          #+#    #+#              #
-#    Updated: 2018/11/15 11:03:50 by fgaribot         ###   ########.fr        #
+#    Updated: 2018/12/06 09:00:04 by fgaribot         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -79,7 +79,8 @@ FILES = $(SRC)ft_memset.c\
 		$(SRC)ft_lstiter.c\
 		$(SRC)ft_lstmap.c\
 		$(SRC)ft_sort_int_tab.c\
-		$(SRC)ft_recursive_power.c
+		$(SRC)ft_recursive_power.c\
+		$(SRC)get_next_line.c
 
 OBJ = $(FILES:.c=.o)
 

@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   valid.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgaribot <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/16 09:47:56 by fgaribot          #+#    #+#             */
-/*   Updated: 2018/12/06 09:01:27 by fgaribot         ###   ########.fr       */
+/*   Created: 2018/12/06 09:13:45 by fgaribot          #+#    #+#             */
+/*   Updated: 2018/12/06 15:37:48 by fgaribot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef VALID_H
+# define VALID_H
 
-# define BUFF_SIZE 256
-# include "libft.h"
-# include <unistd.h>
-# include <stdlib.h>
+typedef struct		s_list t_tetriminoes;
 
-int					get_next_line(const int fd, char **line);
+struct				s_list
+{
+	char			*tetriminoes;
+	int				height;
+	int				width;
+	t_tetriminoes	*next;
+};
 
 #endif
