@@ -17,7 +17,7 @@ typedef struct		s_list t_tetriminoes;
 
 struct				s_list
 {
-	char			*tetriminoes;
+	char			*tetrimino;
 	int				height;
 	int				width;
 	t_tetriminoes	*next;

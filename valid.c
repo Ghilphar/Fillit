@@ -26,7 +26,7 @@ char	*ft_test_tetriminoes(char *piece, int nb)
 	*test[4] = "##.##";
 	*test[5] = "####";
 	*test[6] = "##..##";
-	*test[7] = "##...###";
+	*test[7] = "##...##";
 	*test[8] = "#...#..##";
 	*test[9] = "#..##...#";
 	*test[10] = "##...#...#";
@@ -45,64 +45,65 @@ char	*ft_test_tetriminoes(char *piece, int nb)
 }
 
 
-int		valid_file(int fd)
+int		valid_size(int fd, t_tetriminoes **alst)
 {
 	int		i;
 	int		j;
-	char	*line;
+	char		*line;
+	char		*candidate_tetrimino;
+	char		*tmp;
 
 	i = -1;
 	while (get_next_line(fd, &line) == 1 && ++i < 5)
 	{
 		j = ft_countchar(line, '\n');
-		if (j != 4 || j != 0 || (j == 0 && i != 5) || (i < 5 && j != 4) || i = 5 && j != 0)
+		if (j != 4 || j != 0 || (j == 0 && i != 4) || (i < 4 && j != 4) || (i = 4 && j != 0))
 			return (-1);
-
-	}
-}
-
-
-int		valid_file(int fd)
-{
-	int		i;
-	int		j;
-	char	*line;
-	char	candidate_tetrimino[17];
-
-	i = 0;
-	while (get_next_line(fd, &line) == 1 && i++ < 5)
-	{
-		j = 0;
-		while (i != 5 && line[j] && j < 5)
-			j++;
-		if ((i == 5 && line[0] != '\0') || j != 4)
-			return (-1);
-		if (i < 5 && j == 4)
-			ft_strjoin(candidate_tetrimino, line);
-		if (i == 5 && )
-//		ft_add(candidate_tetrimino);
-		i = ((i == 5 && line[0] == '\0') ? 0 : i);
-		ft_strdel(line);
+		if (i < 4)
+		{
+			tmp = *ft_strjoin(candidate_tetrimino, line);
+			free(candidate_tetrimino);
+			candidate_tetrimino = tmp;
+		}
 		if (i == 5)
-			return (-1);
+//		{
+			i == add_tetrimino(candidate_tetrimino, &alst);
+//			ft_strdel(candidate_tetrimino);
+//			i = -1;
+//		}		
 	}
+	free(line);
 	return (1);
 }
 
-int		valid_file;
+int		add_tetrimino(char	*str, t_tetriminoes **alst)
 {
-	char	*line;
+	t_tetriminoes		*new;
+	char			*tmp;
+
+	new->next = NULL;
+	tmp = ft_strdup(str);
+	tmp->tetrimino = tmp;
+	while (alst->next != NULL)
+		alst = alst->next;
+	alst->next = new;
+	ft_strdel(str);
+	return (-1);
+}
+
+int		valid_tetrimino(t_tetriminoes **alst)
+{
+	t_tetriminoes	*tmp
 	int		i;
-	int		j;
-	int 	fd;
-	char	candidate_tetrimino[26][16];
-	
-	i = 0;
-	fd = open(av[1], O_RDONLY);
-	while (get_next_line(fd, &line) == 1)
+
+	tmp = *alst;
+	while (tmp != NULL)
 	{
-		while (j++ < 5)
-		{
-			
-		}
+		i = 0;
+		while ((alst->tetrimino)[i] == '.' || alst->tetrimino[i] == '#')
+			i++;
+		if (i != 17)
+			return (-1);
+		tmp = alst->next;
+	}
 }
