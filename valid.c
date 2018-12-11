@@ -6,7 +6,7 @@
 /*   By: fgaribot <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/05 12:32:54 by fgaribot          #+#    #+#             */
-/*   Updated: 2018/12/06 16:11:24 by fgaribot         ###   ########.fr       */
+/*   Updated: 2018/12/11 16:33:26 by fgaribot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,20 +57,16 @@ int		valid_size(int fd, t_tetriminoes **alst)
 	while (get_next_line(fd, &line) == 1 && ++i < 5)
 	{
 		j = ft_countchar(line, '\n');
-		if (j != 4 || j != 0 || (j == 0 && i != 4) || (i < 4 && j != 4) || (i = 4 && j != 0))
-			return (-1);
+		if ((i < 4 && j != 4) || (i == 4 && j != 0))
+			exit(EXIT_FAILURE);
 		if (i < 4)
 		{
-			tmp = *ft_strjoin(candidate_tetrimino, line);
+			tmp = ft_strjoin(candidate_tetrimino, line);
 			free(candidate_tetrimino);
 			candidate_tetrimino = tmp;
 		}
 		if (i == 5)
-//		{
-			i == add_tetrimino(candidate_tetrimino, &alst);
-//			ft_strdel(candidate_tetrimino);
-//			i = -1;
-//		}		
+			i = add_tetrimino(candidate_tetrimino, &alst);
 	}
 	free(line);
 	return (1);
@@ -80,30 +76,43 @@ int		add_tetrimino(char	*str, t_tetriminoes **alst)
 {
 	t_tetriminoes		*new;
 	char			*tmp;
+	t_tetriminoes		*first;
 
+	first = *alst;
 	new->next = NULL;
 	tmp = ft_strdup(str);
-	tmp->tetrimino = tmp;
-	while (alst->next != NULL)
-		alst = alst->next;
-	alst->next = new;
+	new->tetrimino = tmp;
+	while ((*alst)->next != NULL)
+		(*alst) = (*alst)->next;
+	(*alst)->next = new;
 	ft_strdel(str);
+	*alst = first;
 	return (-1);
 }
 
 int		valid_tetrimino(t_tetriminoes **alst)
 {
-	t_tetriminoes	*tmp
-	int		i;
+	int				i;
+	int				j;
 
-	tmp = *alst;
 	while (tmp != NULL)
 	{
 		i = 0;
-		while ((alst->tetrimino)[i] == '.' || alst->tetrimino[i] == '#')
+		while ((*alst->tetrimino)[i] == '.' || *alst->tetrimino[i] == '#')
+		{
+			if ((*alst->tetrimino)[i] == '#')
+			{
+				j = (i >= 4 && (alst->tetrimino)[i - 4] == '#') ? j + 1 : j;
+				j = (i > 0 && (alst->tetrimino)[i - 1] == '#') ? j + 1 : j;
+				j = ((alst->tetrimino)[i + 1] == '#') ? j + 1 : j;
+				j = (i < 12 && (*alst->tetrimino)[i + 1] == '#') ? j + 1 : j;
+			}
 			i++;
-		if (i != 17)
+		}
+		if (i != 16 || (j != 6 && j != 8))
 			return (-1);
-		tmp = alst->next;
+		alst->tetrimino = ft_strtrimc(alst->tetrimino, '.');
+		*alst = alst->next;
 	}
+	return (1);
 }
