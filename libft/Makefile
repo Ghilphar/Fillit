@@ -6,7 +6,7 @@
 #    By: fgaribot <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/06 17:15:16 by fgaribot          #+#    #+#              #
-#    Updated: 2018/12/06 09:00:04 by fgaribot         ###   ########.fr        #
+#    Updated: 2018/12/12 17:12:34 by fgaribot         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,7 +65,7 @@ FILES = $(SRC)ft_memset.c\
 		$(SRC)ft_strsplit.c\
 		$(SRC)ft_countsplit.c\
 		$(SRC)ft_countchar.c\
-		$(SRC)ft_strcpycharstop.c\
+		$(SRC)ft_strcpc.c\
 		$(SRC)ft_putendl.c\
 		$(SRC)ft_putendl_fd.c\
 		$(SRC)ft_putnbr_fd.c\
@@ -80,7 +80,9 @@ FILES = $(SRC)ft_memset.c\
 		$(SRC)ft_lstmap.c\
 		$(SRC)ft_sort_int_tab.c\
 		$(SRC)ft_recursive_power.c\
-		$(SRC)get_next_line.c
+		$(SRC)get_next_line.c\
+		$(SRC)ft_strtrimc.c\
+		$(SRC)ft_replace.c
 
 OBJ = $(FILES:.c=.o)
 

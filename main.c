@@ -1,29 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcpycharstop.c                                :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgaribot <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/13 10:09:24 by fgaribot          #+#    #+#             */
-/*   Updated: 2018/11/15 09:58:55 by fgaribot         ###   ########.fr       */
+/*   Created: 2018/12/12 13:56:08 by fgaribot          #+#    #+#             */
+/*   Updated: 2018/12/12 14:36:11 by fgaribot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
+#include "libft/libft.h"
 
-char	*ft_strcpycharstop(char *dest, char *src, char c)
+int		main(int ac, char **av)
 {
-	int		i;
+	(void)ac;
 
-	i = 0;
-	if (!dest || !src)
-		return (NULL);
-	while (src[i] && src[i] != c)
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
+	ft_strtrimc(av[1], '.');
+	ft_strtrimc(av[2], 'w');
+	ft_putendl(av[1]);
+	ft_putendl(av[2]);
 }

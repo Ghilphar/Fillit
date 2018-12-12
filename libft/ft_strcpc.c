@@ -1,20 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_strcpc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgaribot <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/08 16:30:40 by fgaribot          #+#    #+#             */
-/*   Updated: 2018/12/12 14:27:29 by fgaribot         ###   ########.fr       */
+/*   Created: 2018/11/13 10:09:24 by fgaribot          #+#    #+#             */
+/*   Updated: 2018/12/07 14:24:22 by fgaribot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char	*ft_strchr(const char *s, int c)
+#include <string.h>
+
+char	*ft_strcpc(char *dest, char *src, char c)
 {
-	while (*s && *s != (char)c)
-		s++;
-	if (*s == c)
-		return (char *)s;
-	return (0);
+	int		i;
+
+	i = 0;
+	if (!dest || !src)
+		return (NULL);
+	while (src[i] && src[i] != c)
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
 }

@@ -3,93 +3,94 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgaribot <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jmoucach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/16 14:35:06 by fgaribot          #+#    #+#             */
-/*   Updated: 2018/12/04 08:20:35 by fgaribot         ###   ########.fr       */
+/*   Created: 2018/11/20 17:36:08 by jmoucach          #+#    #+#             */
+/*   Updated: 2018/12/12 17:44:57 by fgaribot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "libft.h"
+#include <unistd.h>
+#include <stdlib.h>
 
-static char		*ft_int_strcpycharstop(char **line, char *src, char c)
+static t_list	*ft_link_select(size_t fd, t_list **lst)
 {
-	int				i;
-	char			*tmp;
-	char			*tmp2;
+	t_list			*new;
 
-	i = 0;
-	tmp = NULL;
-	i = ft_countchar(src, c);
-	if (!(tmp = malloc(sizeof(tmp) * (i + 1))))
-		return (0);
-	tmp = ft_strcpycharstop(tmp, src, c);
-	*line = tmp;
-	if (src[i] == '\n')
-		tmp2 = ft_strdup(src + (i + 1));
-	else
-		tmp2 = ft_strdup(src + (i));
-	free(src);
-	return (tmp2);
-}
-
-static t_list	*found_save(t_list **save, int fd)
-{
-	t_list			*tmp;
-
-	tmp = *save;
-	while (tmp)
+	new = *lst;
+	while (new)
 	{
-		if ((int)tmp->content_size == fd)
-			return (tmp);
-		tmp = tmp->next;
+		if (new->content_size == fd)
+			return (new);
+		new = new->next;
 	}
-	if (!(tmp = ft_lstnew("\0", fd)))
+	if (!(new = ft_lstnew("\0", 1)))
 		return (NULL);
-	ft_lstadd(save, tmp);
-	return (tmp);
+	new->content_size = fd;
+	ft_lstadd(lst, new);
+	return (new);
 }
 
-static int		ft_read(int fd, void **str)
+static int		ft_red(void **str, int fd)
 {
 	char			buf[BUFF_SIZE + 1];
-	int				read_size;
-	void			*tmp;
+	char			*tmp;
+	int				ret;
 
-	tmp = NULL;
 	if (read(fd, buf, 0) < 0)
-		return (-1);
-	while ((read_size = read(fd, buf, BUFF_SIZE)))
+		return (0);
+	while (!ft_strchr(*str, '\n') && (ret = read(fd, buf, BUFF_SIZE)))
 	{
-		if (read_size == -1)
-			return (-1);
-		buf[read_size] = '\0';
+		if (ret == -1)
+			return (0);
+		buf[ret] = '\0';
 		tmp = *str;
 		if (!(*str = ft_strjoin(*str, buf)))
-			return (-1);
+			return (0);
 		free(tmp);
-		tmp = NULL;
-		if (ft_strchr(buf, '\n'))
-			break ;
 	}
-	if (read_size < BUFF_SIZE && !ft_strlen(*str))
-		return (0);
+	return (1);
+}
+
+static int		ft_line_treat(void **str, char **line)
+{
+	char			*tmp;
+	int				i;
+	int				j;
+
+	if (!str || !(*str))
+		return (-1);
+	i = ft_strlen(*str);
+	tmp = *str;
+	if (ft_strchr(*str, '\n'))
+	{
+		j = ft_strlen(ft_strchr(*str, '\n'));
+		if (!(*line = ft_strsub(*str, 0, i - j)))
+			return (-1);
+		if (!(*str = ft_strsub(*str, i - j + 1, i)))
+			return (-1);
+	}
+	else
+	{
+		*line = ft_strdup(*str);
+		*str = NULL;
+	}
+	free(tmp);
 	return (1);
 }
 
 int				get_next_line(const int fd, char **line)
 {
-	static t_list	*save = NULL;
+	static t_list	*lst;
 	t_list			*current;
-	int				ret;
 
-	if (fd < 0 || BUFF_SIZE <= 0 || !line)
+	if (fd < 0 || !line || BUFF_SIZE <= 0)
 		return (-1);
-	current = found_save(&save, fd);
-	*line = NULL;
-	ret = ft_read(fd, &(current->content));
-	current->content = ft_int_strcpycharstop(&(*line), current->content, '\n');
-	if (ret == -1 || ret == 0)
-		return (ret);
-	return (1);
+	current = ft_link_select(fd, &lst);
+	if (!ft_red(&(current->content), fd))
+		return (-1);
+	if (!current->content || !ft_strlen(current->content))
+		return (0);
+	return (ft_line_treat(&(current->content), &(*line)));
 }

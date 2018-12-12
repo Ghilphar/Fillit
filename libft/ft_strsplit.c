@@ -6,7 +6,7 @@
 /*   By: fgaribot <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/13 09:14:07 by fgaribot          #+#    #+#             */
-/*   Updated: 2018/11/14 18:57:52 by fgaribot         ###   ########.fr       */
+/*   Updated: 2018/12/12 17:45:57 by fgaribot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	**ft_strsplit(char const *s, char c)
 			if (!(tab[j] = (char *)malloc(sizeof(tab) *
 							(ft_countchar(s + i, c) + 1))))
 				return (NULL);
-			ft_strcpycharstop(tab[j++], (char *)(s + i), c);
+			ft_strcpc(tab[j++], (char *)(s + i), c);
 			i = i + (ft_countchar(s + i, c));
 		}
 	}
