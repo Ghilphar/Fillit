@@ -6,7 +6,7 @@
 /*   By: fgaribot <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/05 12:32:54 by fgaribot          #+#    #+#             */
-/*   Updated: 2018/12/12 17:41:50 by fgaribot         ###   ########.fr       */
+/*   Updated: 2018/12/13 17:04:36 by fgaribot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
-void		add_tetrimino(char	*str, t_trimino **alst)
+void		add_tetrimino(char *str, t_trimino **alst)
 {
 	t_trimino		*new;
 	char			*tmp;
 	t_trimino		*first;
 
 	first = *alst;
-	if(!(new = malloc(sizeof(t_trimino))))
+	if (!(new = malloc(sizeof(t_trimino))))
 	{
 		ft_putstr("Error");
 		exit(EXIT_FAILURE);
@@ -31,43 +31,45 @@ void		add_tetrimino(char	*str, t_trimino **alst)
 	new->next = NULL;
 	tmp = ft_strdup(str);
 	new->pattern = tmp;
+	if ((*alst)->pattern == NULL)
+	{
+		(*alst) = new;
+		return ;
+	}
 	while ((*alst)->next != NULL)
 		(*alst) = (*alst)->next;
 	(*alst)->next = new;
 	ft_strdel(&str);
 	*alst = first;
 }
-/*
-int		ft_test_tetriminoes(char *piece, int nb)
-{
-	char	*test[19];
-	int		i;
 
-	i = 1;
-	test[1] = "###...#";
-	test[2] = "###..#";
-	test[3] = "###.#";
-	test[4] = "##.##";
-	test[5] = "####";
-	test[6] = "##..##";
-	test[7] = "##...##";
-	test[8] = "#...#..##";
-	test[9] = "#..##...#";
-	test[10] = "##...#...#";
-	test[11] = "#...##...#";
-	test[12] = "#...#...#...#";
-	test[13] = "#..##..#";
-	test[14] = "#...###";
-	test[15] = "#..###";
-	test[16] = "#.###";
-	test[17] = "##..#...#";
-	test[18] = "#...##..#";
-	test[19] = "#...#...##";
-	while (ft_strcmp(piece, test[i]) != 0)
+int		ft_test_tetriminoes(char *piece, int i)
+{
+	char			*test[19];
+
+	test[0] = "###...#";
+	test[1] = "###..#";
+	test[2] = "###.#";
+	test[3] = "##.##";
+	test[4] = "####";
+	test[5] = "##..##";
+	test[6] = "##...##";
+	test[7] = "#...#..##";
+	test[8] = "#..##...#";
+	test[9] = "##...#...#";
+	test[10] = "#...##...#";
+	test[11] = "#...#...#...#";
+	test[12] = "#..##..#";
+	test[13] = "#...###";
+	test[14] = "#..###";
+	test[15] = "#.###";
+	test[16] = "##..#...#";
+	test[17] = "#...##..#";
+	test[18] = "#...#...##";
+	while (i < 19 && ft_strcmp(piece, test[i]) != 0)
 		i++;
-	return (i > 19 ? 1 : -1)
+	return (i >= 19 ? 0 : 1);
 }
-*/
 
 int		valid_size(int fd, t_trimino **alst)
 {
@@ -82,9 +84,9 @@ int		valid_size(int fd, t_trimino **alst)
 	{
 		j = ft_countchar(line, '\n');
 		if ((i < 4 && j != 4) || (i == 4 && j != 0))
-			return (-1);
+			return (0);
 		if (i == 0)
-			candidate_tetrimino = ft_strdup(line);	
+			candidate_tetrimino = ft_strdup(line);
 		if (i != 0 && i < 4)
 		{
 			tmp = ft_strjoin(candidate_tetrimino, line);
@@ -93,62 +95,78 @@ int		valid_size(int fd, t_trimino **alst)
 			candidate_tetrimino = tmp;
 		}
 		if (i == 3)
+		{
 			add_tetrimino(candidate_tetrimino, alst);
+		}
 		if (i == 4)
 			i = -1;
 	}
 //	free(line);
-	return (i == 3 ? 1 : -1);
+	return (i == 3 ? 1 : 0);
 }
 
-
-/*
-int		valid_tetrimino(t_tetriminoes **alst)
+int		valid_tetrimino(t_trimino **lst)
 {
 	int				i;
 	int				j;
+	static int		k;
+	t_trimino		*first;
 
-	while (*alst != NULL)
+	first = *lst;
+	while (*lst != NULL)
 	{
 		i = 0;
-		while ((*alst->tetrimino)[i] == '.' || *alst->tetrimino[i] == '#')
+		j = 0;
+		while (((*lst)->pattern)[i] == '.' || (*lst)->pattern[i] == '#')
 		{
-			if ((*alst->tetrimino)[i] == '#')
+			if (((*lst)->pattern)[i] == '#')
 			{
-				j = (i >= 4 && (alst->tetrimino)[i - 4] == '#') ? j + 1 : j;
-				j = (i > 0 && (alst->tetrimino)[i - 1] == '#') ? j + 1 : j;
-				j = ((alst->tetrimino)[i + 1] == '#') ? j + 1 : j;
-				j = (i < 12 && (*alst->tetrimino)[i + 1] == '#') ? j + 1 : j;
+				j = (i >= 4 && ((*lst)->pattern)[i - 4] == '#') ? j + 1 : j;
+				j = (i > 0 && ((*lst)->pattern)[i - 1] == '#') ? j + 1 : j;
+				j = (((*lst)->pattern)[i + 1] == '#') ? j + 1 : j;
+				j = (i < 12 && ((*lst)->pattern)[i + 4] == '#') ? j + 1 : j;
 			}
 			i++;
 		}
 		if (i != 16 || (j != 6 && j != 8))
-			return (-1);
-		alst->tetrimino = ft_strtrimc(alst->tetrimino, '.');
-		*alst = alst->next;
+			return (0);
+		(*lst)->pattern = ft_strtrimc((*lst)->pattern, '.');
+		if (!ft_test_tetriminoes((*lst)->pattern, 0))
+			return (0);
+		ft_replace((*lst)->pattern, '#', k++ + 65);
+		*lst = (*lst)->next;
 	}
+	*lst = first;
 	return (1);
 }
-*/
-/*
-void	tritreminoes(char *av)
-{
-	int				fd;
-	t_tetriminoes	*lst;
 
-	fd = open(av, O_RDONLY);
-	valid_size(fd, &lst);
-}
-*/
-int main(int ac, char **av)
+t_trimino		*tritreminoes(char *av)
 {
 	int				fd;
 	t_trimino		*lst;
 
-	if(!(lst = malloc(sizeof(t_trimino))))
-		return (-1);
+	if (!(lst = malloc(sizeof(t_trimino))))
+		return (NULL);
 	lst->next = NULL;
 	lst->pattern = NULL;
-	fd = open(av[1], O_RDONLY);
-	ft_putnbr(valid_size(fd, &lst));
+	fd = open(av, O_RDONLY);
+	if (!(valid_size(fd, &lst)))
+	{
+		ft_putendl("error");
+		exit(EXIT_FAILURE);
+	}
+	ft_putendl("correct size");
+	if (!(valid_tetrimino(&lst)))
+	{
+		ft_putendl("bad tetrimino");
+		exit(EXIT_FAILURE);
+	}
+	ft_putendl("# and .");
+	return (lst);
+}
+
+int		main(int ac, char **av)
+{
+	(void)ac;
+	tritreminoes(av[1]);
 }
