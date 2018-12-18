@@ -6,7 +6,7 @@
 /*   By: fgaribot <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 18:17:52 by fgaribot          #+#    #+#             */
-/*   Updated: 2018/12/12 17:12:05 by fgaribot         ###   ########.fr       */
+/*   Updated: 2018/12/17 18:11:54 by jmoucach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <string.h>
 
-# define BUFF_SIZE 256
+# define BUFF_SIZE 8
 
 typedef	struct		s_list
 {

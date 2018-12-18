@@ -6,7 +6,7 @@
 /*   By: fgaribot <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 12:49:30 by fgaribot          #+#    #+#             */
-/*   Updated: 2018/12/12 14:34:01 by fgaribot         ###   ########.fr       */
+/*   Updated: 2018/12/14 11:50:11 by jmoucach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 char	*ft_replace(char *str, char find, char replace)
 {
-	if (!str)
-		return (NULL);
 	char	*current_pos;
 
+	if (!str)
+		return (NULL);
 	current_pos = ft_strchr(str, find);
 	while (current_pos)
 	{

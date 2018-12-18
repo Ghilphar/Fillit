@@ -6,7 +6,7 @@
 /*   By: jmoucach <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 17:36:08 by jmoucach          #+#    #+#             */
-/*   Updated: 2018/12/12 17:44:57 by fgaribot         ###   ########.fr       */
+/*   Updated: 2018/12/17 18:21:54 by jmoucach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ static int		ft_line_treat(void **str, char **line)
 	}
 	else
 	{
-		*line = ft_strdup(*str);
+		if (!(*line = ft_strdup(*str)))
+			return (-1);
 		*str = NULL;
 	}
 	free(tmp);
