@@ -6,12 +6,59 @@
 /*   By: fgaribot <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 17:57:53 by fgaribot          #+#    #+#             */
-/*   Updated: 2018/12/18 19:52:41 by fgaribot         ###   ########.fr       */
+/*   Updated: 2018/12/19 17:26:19 by fgaribot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 #include <stdio.h>
+
+/*
+void		add_tetrimino(char *candidate, t_trimino **alst)
+{
+	t_trimino	*new;
+	t_trimino	*first;
+
+	first = *alst;
+	if (!(new = malloc(sizeof(t_trimino))))
+	{
+		
+	}
+}
+*/
+
+int			ft_neigbour(char *str)
+{
+	int			i;
+	int			j;
+
+	i = 0;
+	j = 0;
+	while (str[i] == '.' || str[i] == '#')
+	{
+		if (str[i] == '#')
+		{
+			j = (i > = 4 && str[i - 4] == '#') ? j + 1 : j;
+			j = (i > 0 && str[i - 1] == '#') ? j + 1 : j;
+			j = (i != 3 && i != 7 && i != 11 && i != 15 &&
+					str[i + 1] == '#') j + 1 : j;
+			j = (i < 12 && str[i + 4] == '#') ? j + 1 : j;
+		}
+		i++;
+	}
+	return (i != 16 || (j != 6 && j != 8) ? 0 : 1);
+}
+
+void		test_candidate(char **candidate, t_trimino **lst)
+{
+	if (!(ft_neigbour(*candidate)))
+	{
+		free(candidate);
+		ft_free_tetri(&lst);
+		ft_putendl("error");
+		exit(EXIT_FAILURE);
+	}
+}
 
 void		ft_puterror(void)
 {
@@ -42,7 +89,6 @@ char		*ft_joincandidate(char **candidate, char **line)
 	return (newcandidate);
 }
 
-void		ft_add_tetrimino(char **str, )
 
 int			valid_size(int fd, t_trimino **alst, int i)
 {
