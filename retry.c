@@ -13,19 +13,72 @@
 #include "fillit.h"
 #include <stdio.h>
 
-/*
-void		add_tetrimino(char *candidate, t_trimino **alst)
+void		add_tail(t_trimino *new, t_trimino **lst)
 {
-	t_trimino	*new;
-	t_trimino	*first;
+	t_trimino		*current;
 
-	first = *alst;
+	current = *lst;
+	if (current->pattern == NULL)
+	{
+		*lst = new;
+		free(current);
+		return ;
+	}
+	while (current->next != NULL)
+		current = current->next;
+	current->next = new;
+	new->next = NULL;
+}
+
+void		create_tetrimino(char **candidate, t_trimino **lst)
+{
+	t_trimino		*new;
+
 	if (!(new = malloc(sizeof(t_trimino))))
 	{
-		
+		free(candidate);
+		ft_free_tetri(lst);
+		ft_putendl("error");
+		exit(EXIT_FAILURE);
 	}
+	if (!(new->pattern = ft_strdup(*candidate)))
+	{
+		free(new);
+		free(candidate);
+		ft_putendl("error");
+		exit(EXIT_FAILURE);
+	}
+	add_tail(new, lst);
 }
-*/
+
+
+int                     ft_test_tetriminoes(char *piece, int i)
+{
+	char                    *test[19];
+
+	test[0] = "###...#";
+	test[1] = "###..#";
+	test[2] = "###.#";
+	test[3] = "##.##";
+	test[4] = "####";
+	test[5] = "##..##";
+	test[6] = "##...##";
+	test[7] = "#...#..##";
+	test[8] = "#..##...#";
+	test[9] = "##...#...#";
+	test[10] = "#...##...#";
+	test[11] = "#...#...#...#";
+	test[12] = "#..##..#";
+	test[13] = "#...###";
+	test[14] = "#..###";
+	test[15] = "#.###";
+	test[16] = "##..#...#";
+	test[17] = "#...##..#";
+	test[18] = "#...#...##";
+	while (i < 19 && ft_strcmp(piece, test[i]) != 0)
+		i++;
+	return (i >= 19 ? 0 : 1);
+}
 
 int			ft_neigbour(char *str)
 {
@@ -51,13 +104,25 @@ int			ft_neigbour(char *str)
 
 void		test_candidate(char **candidate, t_trimino **lst)
 {
+	static int		k;
+
 	if (!(ft_neigbour(*candidate)))
 	{
 		free(candidate);
-		ft_free_tetri(&lst);
+		ft_free_tetri(lst);
 		ft_putendl("error");
 		exit(EXIT_FAILURE);
 	}
+	*candidate = ft_strtrimc((*candidate), '.');
+	if (!ft_test_tetriminoes(*candidate, 0))
+	{
+		free(candidate);
+		ft_free_tetri(lst);
+		ft_putendl("error");
+		exit(EXIT_FAILURE);
+	}
+	ft_replace(*candidate, '#', k++ + 65);	
+	create_tetrimino(candidate, lst);
 }
 
 void		ft_puterror(void)
@@ -113,7 +178,7 @@ int			valid_size(int fd, t_trimino **alst, int i)
 				return(0);
 		if (i == 3)
 		{
-			add_tetrimino(candidate, alst);
+			test_candidate(&candidate, alst);
 			free(candidate);
 		}
 		if (i == 4)
