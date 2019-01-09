@@ -5,106 +5,17 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fgaribot <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/05 12:32:54 by fgaribot          #+#    #+#             */
-/*   Updated: 2018/12/18 17:21:22 by fgaribot         ###   ########.fr       */
+/*   Created: 2018/12/18 17:57:53 by fgaribot          #+#    #+#             */
+/*   Updated: 2019/01/09 16:42:20 by fgaribot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
-#include <stdio.h>
 
-void		add_tetrimino(char *str, t_trimino **alst)
+int			ft_neigbour(char *str)
 {
-	t_trimino		*new;
-	t_trimino		*first;
-
-	first = *alst;
-	if (!(new = malloc(sizeof(t_trimino))))
-		ft_puterror();
-	if (!(new->pattern = ft_strdup(str)))
-	{
-		free(new);
-		ft_puterror();
-	}
-	new->next = NULL;
-	if ((*alst)->pattern == NULL)
-	{
-		*alst = new;
-		free(first);
-		return ;
-	}
-	while ((*alst)->next != NULL)
-		*alst = (*alst)->next;
-	(*alst)->next = new;
-	ft_strdel(&str);
-	*alst = first;
-}
-
-int			ft_test_tetriminoes(char *piece, int i)
-{
-	char			*test[19];
-
-	test[0] = "###...#";
-	test[1] = "###..#";
-	test[2] = "###.#";
-	test[3] = "##.##";
-	test[4] = "####";
-	test[5] = "##..##";
-	test[6] = "##...##";
-	test[7] = "#...#..##";
-	test[8] = "#..##...#";
-	test[9] = "##...#...#";
-	test[10] = "#...##...#";
-	test[11] = "#...#...#...#";
-	test[12] = "#..##..#";
-	test[13] = "#...###";
-	test[14] = "#..###";
-	test[15] = "#.###";
-	test[16] = "##..#...#";
-	test[17] = "#...##..#";
-	test[18] = "#...#...##";
-	while (i < 19 && ft_strcmp(piece, test[i]) != 0)
-		i++;
-	return (i >= 19 ? 0 : 1);
-}
-
-int			valid_size(int fd, t_trimino **alst, int i)
-{
-	int				j;
-	char			*line;
-	char			*candidate;
-	char			*tmp;
-
-	while (get_next_line(fd, &line) == 1 && ++i < 5)
-	{
-		j = ft_countchar(line, '\n');
-		if ((i < 4 && j != 4) || (i == 4 && j != 0))
-		{
-			free(candidate);
-			free(line);
-			return (0);
-		}
-		if (!(candidate = (i == 0 ? ft_strdup(line) : candidate)))
-			return (0);
-		if (i != 0 && i < 4)
-		{
-			if (!(tmp = ft_strjoin(candidate, line)))
-				return (0);
-			free(candidate);
-			candidate = tmp;
-		}
-		i == 3 ? add_tetrimino(candidate, alst) : 1;
-		i = (i == 4 ? -1 : i);
-		free(line);
-	}
-//	ft_strdel(&candidate);
-	return (i == 3 ? 1 : 0);
-}
-
-int			ft_neighbour(char *str)
-{
-	int				i;
-	int				j;
+	int			i;
+	int			j;
 
 	i = 0;
 	j = 0;
@@ -123,22 +34,76 @@ int			ft_neighbour(char *str)
 	return (i != 16 || (j != 6 && j != 8) ? 0 : 1);
 }
 
-int			valid_tetrimino(t_trimino **lst)
+void		test_candidate(char **candidate, t_trimino **lst)
 {
 	static int		k;
-	t_trimino		*first;
 
-	first = *lst;
-	while (*lst != NULL)
+	if (!(ft_neigbour(*candidate)))
 	{
-		if (!ft_neighbour((*lst)->pattern))
-			return (0);
-		(*lst)->pattern = ft_strtrimc((*lst)->pattern, '.');
-		if (!ft_test_tetriminoes((*lst)->pattern, 0))
-			return (0);
-		ft_replace((*lst)->pattern, '#', k++ + 65);
-		*lst = (*lst)->next;
+		free(candidate);
+		ft_free_tetri(lst);
+		ft_puterror();
 	}
-	*lst = first;
-	return (1);
+	*candidate = ft_strtrimc((*candidate), '.');
+	if (!ft_test_tetriminoes(*candidate, 0))
+	{
+		free(candidate);
+		ft_free_tetri(lst);
+		ft_puterror();
+	}
+	ft_replace(*candidate, '#', k++ + 65);
+	create_tetrimino(candidate, lst);
+	free(*candidate);
+}
+
+int			ft_test_size(char **line, int i)
+{
+	int			j;
+
+	j = ft_countchar(*line, '\n');
+	return (((i < 4 && j != 4) || (i == 4 && j != 0)) ? 0 : 1);
+}
+
+char		*ft_joincandidate(char **candidate, char **line)
+{
+	char		*newcandidate;
+
+	if (!(newcandidate = ft_strjoin(*candidate, *line)))
+	{
+		free(*line);
+		free(*candidate);
+		return (NULL);
+	}
+	ft_strdel(candidate);
+	ft_strdel(line);
+	return (newcandidate);
+}
+
+int			valid_size(int fd, t_trimino **alst, int i)
+{
+	char		*candidate;
+	char		*line;
+
+	while (get_next_line(fd, &line) == 1 && ++i < 5)
+	{
+		if (!(candidate = (i == 0 ? ft_strdup(line) : candidate)))
+		{
+			free(line);
+			return (0);
+		}
+		if (!(ft_test_size(&line, i)))
+		{
+			free(candidate);
+			free(line);
+			return (0);
+		}
+		if (i != 0 && i < 4)
+			if (!(candidate = ft_joincandidate(&candidate, &line)))
+				return (0);
+		if (i == 3)
+			test_candidate(&candidate, alst);
+		i = i == 4 ? -1 : i;
+		free(line);
+	}
+	return (i == 3 ? 1 : 0);
 }
