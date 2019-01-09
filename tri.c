@@ -6,7 +6,7 @@
 /*   By: fgaribot <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/14 19:24:04 by fgaribot          #+#    #+#             */
-/*   Updated: 2018/12/18 17:11:30 by fgaribot         ###   ########.fr       */
+/*   Updated: 2019/01/09 11:27:55 by fgaribot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,6 @@ t_trimino	*tritreminoes(char *av)
 	lst->pattern = NULL;
 	fd = open(av, O_RDONLY);
 	if (!(valid_size(fd, &lst, -1)))
-	{
-		ft_free_tetri(&lst);
-		ft_puterror();
-	}
-	if (!(valid_tetrimino(&lst)))
 	{
 		ft_free_tetri(&lst);
 		ft_puterror();
