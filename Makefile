@@ -6,16 +6,16 @@
 #    By: jmoucach <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/05 12:32:45 by jmoucach          #+#    #+#              #
-#    Updated: 2019/01/09 15:59:16 by fgaribot         ###   ########.fr        #
+#    Updated: 2019/01/09 16:42:36 by fgaribot         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME= fillit
-CC= clang
-CFLAGS=  -O1 -g -fsanitize=address -fno-omit-frame-pointer
+CC= gcc
+CFLAGS=  -Wall -Werror -Wextra -g
 SRC= ./main.c\
 	 ./placement.c\
-	 ./retry.c\
+	 ./valid.c\
 	 ./tetrimino_lst.c\
 	 ./backtrack.c\
 	 ./tri.c
